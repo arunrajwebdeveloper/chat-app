@@ -1,0 +1,23 @@
+# === Global ===
+*.log
+.DS_Store
+Thumbs.db
+.env
+.env.local
+.env.*.local
+.vscode/
+.idea/
+*.sw?
+*.tsbuildinfo
+
+# === Client (Next.js) ===
+client/node_modules/
+client/dist/
+client/.env
+client/.env.local
+
+# === Server (NestJS) ===
+server/node_modules/
+server/dist/
+server/.env
+server/.env.local

@@ -143,7 +143,14 @@ function Chat({ user }) {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "Arial" }}>
+    <div
+      style={{
+        display: "flex",
+        maxWidth: 850,
+        height: "100vh",
+        fontFamily: "Arial",
+      }}
+    >
       {/* Sidebar */}
       <div
         style={{

@@ -231,29 +231,56 @@ function Chat({ user }) {
             marginBottom: "10px",
           }}
         >
-          {chat.map((c, i) => (
-            <div
-              key={i}
-              style={{ textAlign: c.senderId === user.id ? "right" : "left" }}
-            >
+          {chat.map((c, i) => {
+            // Check if the previous message was sent by the same person
+            const isSameSender = i > 0 && chat[i - 1].senderId === c.senderId;
+            const isMe = c.senderId === user.id;
+
+            return (
               <div
+                key={i}
                 style={{
-                  display: "inline-block",
-                  padding: "8px",
-                  borderRadius: "10px",
-                  backgroundColor:
-                    c.senderId === user.id ? "#007bff" : "#f1f0f0",
-                  color: c.senderId === user.id ? "white" : "black",
-                  margin: "5px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: isMe ? "flex-end" : "flex-start",
+                  marginTop: isSameSender ? "2px" : "12px", // Less space between grouped messages
                 }}
               >
-                <small style={{ display: "block", fontSize: "10px" }}>
-                  {c.senderName}
-                </small>
-                {c.text}
+                {/* 1. Show Name ONLY if it's the first message of a group and NOT me */}
+                {!isSameSender && !isMe && (
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      marginBottom: "5px",
+                      color: "#555",
+                    }}
+                  >
+                    {c.senderName}
+                  </span>
+                )}
+                {/* 2. Message Bubble */}
+                <div
+                  style={{
+                    position: "relative",
+                    backgroundColor: isMe ? "#007bff" : "#fff",
+                    color: isMe ? "white" : "black",
+                    padding: "8px 12px",
+                    borderRadius: "15px",
+                    // If it's the first message, give it a sharp corner (the "arrow")
+                    borderTopRightRadius:
+                      isMe && !isSameSender ? "2px" : "15px",
+                    borderTopLeftRadius:
+                      !isMe && !isSameSender ? "2px" : "15px",
+                    maxWidth: "70%",
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  {c.text}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           {/* TYPING INDICATOR AREA */}
           {whoIsTyping && (

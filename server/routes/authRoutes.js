@@ -5,10 +5,12 @@ const verifyToken = require("../middleware/authMiddleware");
 const User = require("../models/User");
 const Message = require("../models/Message");
 
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
 const cookieOptions = {
   httpOnly: true,
-  secure: false, // Set to true in production
-  sameSite: "Lax",
+  secure: IS_PRODUCTION,
+  sameSite: IS_PRODUCTION ? "none" : "lax",
 };
 
 router.post("/register", async (req, res) => {
@@ -40,11 +42,11 @@ router.post("/login", async (req, res) => {
 
   res.cookie("accessToken", accessToken, {
     ...cookieOptions,
-    maxAge: 15 * 60 * 1000,
+    maxAge: 15 * 60 * 1000, // 15min
   });
   res.cookie("refreshToken", refreshToken, {
     ...cookieOptions,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7days
   });
 
   res.json({ id: user._id, username: user.username });
